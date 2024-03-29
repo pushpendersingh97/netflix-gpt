@@ -22,7 +22,7 @@ const Login = () => {
         <div className="flex w-100">
           <Header />
         </div>
-        <div class="w-full mx-auto max-w-lg ">
+        <div className="w-full mx-auto max-w-lg ">
           <form className="bg-[#00000080] rounded px-8 pt-6 pb-8 mb-4">
             <div className="font-bold text-lg mb-5">
               {isSignIn ? "Sign In" : "Sign Up"}
@@ -31,7 +31,7 @@ const Login = () => {
               <div className="mb-4">
                 <label
                   className="block text-gray-200 text-sm font-bold mb-2"
-                  for="username"
+                  htmlFor="username"
                 >
                   Full Name
                 </label>
@@ -46,7 +46,7 @@ const Login = () => {
             <div className="mb-4">
               <label
                 className="block text-gray-200 text-sm font-bold mb-2"
-                for="username"
+                htmlFor="username"
               >
                 Username
               </label>
@@ -60,7 +60,7 @@ const Login = () => {
             <div className="mb-6">
               <label
                 className="block text-gray-200 text-sm font-bold mb-2"
-                for="password"
+                htmlFor="password"
               >
                 Password
               </label>
@@ -84,7 +84,7 @@ const Login = () => {
                 href="/#"
                 onClick={() => setSignIn(!isSignIn)}
               >
-                {isSignIn ? "New to site?" : "Already have account?"}
+                {isSignIn ? "New to Netflix? Sign Up Now" : "Already have account?"}
               </a>
             </div>
           </form>
