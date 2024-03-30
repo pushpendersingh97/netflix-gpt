@@ -3,34 +3,86 @@ import { Header } from "../common/Header";
 import { BACKGROUND_IMG } from "../../utils/constants";
 import { validateData } from "../../utils/validation";
 
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { auth } from "../../utils/firebase";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../../utils/userSlice";
+
 const Login = () => {
   const [isSignIn, setSignIn] = useState(true);
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const username = useRef(null);
   const password = useRef(null);
   const fullName = useRef(null);
 
-
   const handleClick = () => {
-    const message = validateData(username.current.value, password.current.value)
-    if(message) {
-      setErrorMessage(message);
+    const message = validateData(
+      username.current.value,
+      password.current.value
+    );
+    setErrorMessage(message);
+    if (message) {
+      return;
     }
-  }
+
+    if (!isSignIn) {
+      createUserWithEmailAndPassword(
+        auth,
+        username.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+
+          updateProfile(user, {
+            displayName: fullName.current.value,
+          })
+            .then(() => {
+              const { uid, email, displayName } = auth.currentUser;
+              dispatch(
+                addUser({ uid: uid, email: email, displayName: displayName })
+              );
+              navigate("./browse");
+            })
+            .catch((error) => {
+              setErrorMessage(error);
+            });
+        })
+        .catch((error) => {
+          setErrorMessage(error.code + " " + error.message);
+        });
+    } else {
+      signInWithEmailAndPassword(
+        auth,
+        username.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          navigate("/browse");
+        })
+        .catch((error) => {
+          setErrorMessage(error.code + " " + error.message);
+        });
+    }
+  };
 
   const toggleSignIn = () => {
-    setErrorMessage(null)
-    setSignIn(!isSignIn)
-  }
+    setErrorMessage(null);
+    setSignIn(!isSignIn);
+  };
 
   return (
     <div className=" w-full bg-gradient-to-b from-black text-white">
       <div className="absolute w-full -z-10">
-        <img
-          src={BACKGROUND_IMG}
-          alt="Background"
-          className="h-100 w-full"
-        />
+        <img src={BACKGROUND_IMG} alt="Background" className="h-100 w-full" />
       </div>
       <div className="container mx-auto z-10 h-100">
         <div className="flex w-100">
@@ -88,7 +140,9 @@ const Login = () => {
                 ref={password}
               />
             </div>
-            {errorMessage && <p className="text-red-700 mb-4">{errorMessage}</p>}
+            {errorMessage && (
+              <p className="text-red-700 mb-4">{errorMessage}</p>
+            )}
             <div className="flex items-center justify-between">
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -102,7 +156,9 @@ const Login = () => {
                 href="/#"
                 onClick={toggleSignIn}
               >
-                {isSignIn ? "New to Netflix? Sign Up Now" : "Already have account?"}
+                {isSignIn
+                  ? "New to Netflix? Sign Up Now"
+                  : "Already have account?"}
               </a>
             </div>
           </form>
