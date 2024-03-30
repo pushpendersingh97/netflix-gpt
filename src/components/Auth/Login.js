@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Header } from "../common/Header";
-import { BACKGROUND_IMG } from "../../utils/constants";
+import { BACKGROUND_IMG, PROFILE_IMG } from "../../utils/constants";
 import { validateData } from "../../utils/validation";
 
 import {
@@ -9,14 +9,12 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../../utils/firebase";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../utils/userSlice";
 
 const Login = () => {
   const [isSignIn, setSignIn] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const username = useRef(null);
   const password = useRef(null);
@@ -44,13 +42,13 @@ const Login = () => {
 
           updateProfile(user, {
             displayName: fullName.current.value,
+            photoURL: PROFILE_IMG
           })
             .then(() => {
-              const { uid, email, displayName } = auth.currentUser;
+              const { uid, email, displayName, photoURL } = auth.currentUser;
               dispatch(
-                addUser({ uid: uid, email: email, displayName: displayName })
+                addUser({ uid: uid, email: email, displayName: displayName, photoURL: photoURL })
               );
-              navigate("./browse");
             })
             .catch((error) => {
               setErrorMessage(error);
@@ -65,9 +63,7 @@ const Login = () => {
         username.current.value,
         password.current.value
       )
-        .then((userCredential) => {
-          navigate("/browse");
-        })
+        .then(() => {})
         .catch((error) => {
           setErrorMessage(error.code + " " + error.message);
         });

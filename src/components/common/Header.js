@@ -1,22 +1,38 @@
-import { signOut } from "firebase/auth";
-import React from "react";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import React, { useEffect } from "react";
 import { auth } from "../../utils/firebase";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addUser, removeUser } from "../../utils/userSlice";
 
 export const Header = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
 
-  console.log(user)
+  useEffect(() => {
+    const suscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const { uid, email, displayName, photoURL } = user;
+        dispatch(addUser({ uid: uid, email: email, displayName: displayName, photoURL: photoURL }));
+
+        navigate("/browse");
+      } else {
+        dispatch(removeUser());
+        navigate("/");
+      }
+    });
+
+    // Remove the event listner if header dismount
+    return () => suscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSignOut = () => {
     signOut(auth)
-      .then(() => {
-        navigate("/");
-      })
+      .then(() => {})
       .catch((error) => {
-        // An error happened.
+        console.log(error);
       });
   };
 
@@ -25,7 +41,9 @@ export const Header = () => {
       <img src="/Netflix_Logo_PMS.png" alt="Logo" className="h-16" />
       {user && (
         <div className="flex">
-          <span className="font-bold pr-3">{user.displayName}</span>
+          <span className="font-bold pr-3">
+            <img src={user.photoURL} alt="Logo" className="h-12" />
+          </span>
           <button onClick={handleSignOut}>Sign Out</button>
         </div>
       )}
