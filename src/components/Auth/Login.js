@@ -10,7 +10,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../../utils/firebase";
 import { useDispatch } from "react-redux";
-import { addUser } from "../../utils/userSlice";
+import { addUser } from "../../utils/store/userSlice";
 
 const Login = () => {
   const [isSignIn, setSignIn] = useState(true);
@@ -77,14 +77,14 @@ const Login = () => {
 
   return (
     <div className=" w-full bg-gradient-to-b from-black text-white">
-      <div className="absolute w-full -z-10">
-        <img src={BACKGROUND_IMG} alt="Background" className="h-100 w-full" />
+      <div className="absolute w-full h-full -z-10">
+        <img src={BACKGROUND_IMG} alt="Background" className="h-full w-full" />
       </div>
-      <div className="container mx-auto z-10 h-100">
+      <div className="container mx-auto z-10 ">
         <div className="flex w-100">
           <Header />
         </div>
-        <div className="w-full mx-auto max-w-lg ">
+        <div className="w-full mx-auto max-w-lg pt-60 ">
           <form className="bg-[#00000080] rounded px-8 pt-6 pb-8 mb-4">
             <div className="font-bold text-lg mb-5">
               {isSignIn ? "Sign In" : "Sign Up"}

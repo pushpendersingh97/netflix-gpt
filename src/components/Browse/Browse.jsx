@@ -1,12 +1,17 @@
 import React from "react";
 import { Header } from "../common/Header";
+import useNowPlayingMovies from "../../utils/custom-hooks/useNowPlayingMovies";
+import MainContainer from "./MainContainer";
+import SecondaryContainer from "./SecondaryContainer";
 
 export const Browse = () => {
+  useNowPlayingMovies();
+
   return (
-    <div className="w-full bg-gradient-to-b from-black text-white">
-      <div className="container mx-auto z-10 h-100">
+    <div className="w-full">
           <Header />
-      </div>
+          <MainContainer />
+          <SecondaryContainer />
     </div>
   );
 };

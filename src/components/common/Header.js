@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { auth } from "../../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addUser, removeUser } from "../../utils/userSlice";
+import { addUser, removeUser } from "../../utils/store/userSlice";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -32,12 +32,11 @@ export const Header = () => {
     signOut(auth)
       .then(() => {})
       .catch((error) => {
-        console.log(error);
       });
   };
 
   return (
-    <div className="flex justify-between items-center py-4">
+    <div className="flex justify-between items-center py-4 bg-gradient-to-b from-black text-white px-12 absolute z-10 w-screen">
       <img src="/Netflix_Logo_PMS.png" alt="Logo" className="h-16" />
       {user && (
         <div className="flex">
