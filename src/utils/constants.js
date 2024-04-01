@@ -3,6 +3,8 @@ export const BACKGROUND_IMG =
 export const PROFILE_IMG =
   "https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745";
 
+export const BASE_IMG_URL = "https://image.tmdb.org/t/p/w500"
+
 export const API_OPTIONS = {
   method: "GET",
   headers: {
