@@ -35,11 +35,16 @@ export const Header = () => {
       });
   };
 
+  const handleSearch = () => {
+    navigate("/search")
+  }
+
   return (
     <div className="flex justify-between items-center py-4 bg-gradient-to-b from-black text-white px-12 absolute z-10 w-screen">
       <img src="/Netflix_Logo_PMS.png" alt="Logo" className="h-16" />
       {user && (
-        <div className="flex">
+        <div className="flex justify-center items-center">
+          <span className="mr-3" onClick={handleSearch}><span className="pr-2">&#128269;</span> Search</span>
           <span className="font-bold pr-3">
             <img src={user.photoURL} alt="Logo" className="h-12" />
           </span>
